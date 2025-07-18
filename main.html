@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diffie-Hellman Shared Secret Analogy</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #1a202c, #2d1a3a);
+            color: #e2e8f0;
+            line-height: 1.6;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex; /* Use flexbox for body to center content if needed */
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 0;
+            flex-grow: 1; /* Allow container to grow and fill space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .section-card {
+            background: linear-gradient(to bottom right, #2d3748, #3a2d48);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            padding: 3rem; /* Padding for content inside the card */
+            margin-bottom: 9rem; /* Increased margin for more separation */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center content vertically within the card */
+            /* Adjusted height to account for new margin-bottom */
+            height: calc(100vh - 9rem); /* Full viewport height minus the new margin */
+            box-sizing: border-box; /* Include padding in height calculation */
+        }
+        .section-card:last-child {
+            margin-bottom: 0; /* No margin on the last card */
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+        h1, h2, h3 {
+            font-weight: 700;
+            color: #f8fafc;
+        }
+        h1 {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 {
+            font-size: 5rem;
+            margin-bottom: 2rem !important;
+            text-align: center;
+        }
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #cbd5e1;
+        }
+        .key-message {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #cbd5e1;
+            max-width: 80%;
+        }
+        .graphic-content {
+            margin-top: 2rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .graphic-content img {
+            max-width: 90%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .graphic-content svg {
+            width: 120px;
+            height: 120px;
+            color: #a855f7;
+        }
+        .color-swatch {
+            width: 120px;
+            height: 120px;
+            border-radius: 0.75rem;
+            border: 2px solid #475569;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+        .list-item {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            text-align: left;
+            width: 100%;
+        }
+        .list-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #c084fc;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .flex-row-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .text-small {
+            font-size: 1rem;
+            color: #94a3b8;
+            max-width: 90%;
+        }
+        /* Specific adjustments for graphic placeholders */
+        .graphic-content .border-2 {
+            border-color: #64748b;
+            color: #cbd5e1;
+            font-size: 1.2rem;
+            padding: 1rem;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #818cf8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+        <!-- Slide 1: Title Slide -->
+        <section id="title-slide" class="section-card">
+            <h1 class="text-[3rem] mb-8 text-center font-bold text-[#f8fafc]">Sharing Secrets in Plain Sight: <br class="hidden sm:block"> The Diffie-Hellman Analogy</h1>
+            <p class="key-message">How can two people create a secret together, even if someone is listening to everything they say?</p>
+            <div class="graphic-content">
+                <img src="bob-alice-eve.png" alt="Alice and Bob with Eve listening" class="w-[300px] h-auto">
+            </div>
+        </section>
+
+        <!-- Slide 2: The Challenge -->
+        <section id="the-challenge" class="section-card">
+          <h1 class="text-[3rem] mb-8 text-center font-bold text-[#f8fafc]">The Problem: No Pre-Shared Secret</h1>
+            <p class="key-message">Alice and Bob want to send secret messages, but they have never met to agree on a secret code. If they send a secret code over an open channel, an eavesdropper (Eve) will see it!</p>
+            <div class="graphic-content">
+                <img src="eavesdropping1.png" alt="Alice whispering to Bob across open space" class="w-[50%] md:w-[37.5%] lg:w-[33.33%] h-auto">
+            </div>
+        </section>
+
+        <!-- Slide 3: The Public Base -->
+        <section id="public-base" class="section-card">
+            <h1 class="text-[3rem] mb-8 text-center font-bold text-[#f8fafc]">Step 1: Agree on a Common Public Color</h1>
+            <p class="key-message">Alice and Bob openly agree on a common base paint color. Everyone, including Eve, knows this color. It is their starting point.</p>
+            <div class="graphic-content">
+                <div class="flex-row-center">
+                    <div class="color-swatch" style="background-color: #FACC15;"></div>
+                </div>
+                <img src="public-color-yellow.png" alt="Alice, Bob, Eve acknowledge public color" class="w-[40%] md:w-[30.0%]">
+            </div>
+        </section>
+
+        <!-- Slide 4: Your Secret Ingredient -->
+        <section id="secret-ingredient" class="section-card">
+            <h1 class="text-[3rem] mb-8 text-center font-bold text-[#f8fafc]">Step 2: Each Picks a Secret Personal Color</h1>
+            <p class="key-message">Alice secretly chooses her own unique color. Bob secretly chooses his own unique color. They keep these colors absolutely private – no one else knows them.</p>
+            <div class="graphic-content">
+                <div class="flex-row-center gap-x-[3in]">
+                    <div>
+                        <img src="alice-red-paint-can.png" alt="Alices Secret Red Paint Can" class="w-[220px]">
+                        <div class="color-swatch" style="background-color: #EF4444; filter: blur(3px);"></div>
+                    </div>
+                    <div>
+                        <img src="bobs-blue-paint-can.png" alt="Bobs Secret Blue Paint Can" class="w-[220px]">
+                        <div class="color-swatch" style="background-color: #3B82F6; filter: blur(3px);"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Mixing and Exchanging --><!-- Slide 5: Mixing and Exchanging -->
+	<section id="mixing-exchanging" class="section-card">
+	    <h1 class="text-[3rem] mb-8 text-center font-bold text-[#f8fafc]">Step 3: Mix and Share a "Public Mixture"</h1>
+	    <p class="key-message">
+		<ul class="list-disc ml-6 text-left w-full">
+		    <li class="list-item">Alice mixes her secret color with the public base color.</li>
+		    <li class="list-item">Bob mixes his secret color with the public base color.</li>
+		    <li class="list-item">They then <span class="font-bold">publicly exchange</span> these new, mixed colors.</li>
+		</ul>
+	    </p>
+	    <div class="graphic-content">
+		<div class="flex flex-col md:flex-row justify-around items-center w-full gap-4">
+		    <div class="text-center">
+			<h3 class="text-lg font-semibold">Alices Mix</h3>
+			<div class="flex flex-col items-center gap-2">
+			    <img src="mixing-yellow-and-red.png" alt="Yellow and Red Paint Mixing" class="w-[200px] h-auto">
+			    <img src="orange-bowl.png" alt="Bowl of Orange Paint" class="w-[200px] h-auto">
+			</div>
+			<p class="text-small mt-2">Alices public mixture sent to Bob.</p>
+		    </div>
+		    <div class="hidden md:flex flex-col items-center justify-center transform translate-y-[100px]">
+			<div class="flex justify-center items-center w-full">
+			  <img src="mailman-walking-with-orange-can.png" alt="Mailman walking with orange can" class="w-[150px] h-auto mr-4">
+			  <img src="skinny-two-headed-arrow.png" alt="Two-headed exchange arrow" class="w-[250px] h-auto">
+			  <img src="mailman-walking-with-green-can.png" alt="Mailman walking with green can" class="w-[150px] h-auto ml-4"> </div>
+		    </div>
+		    <div class="text-center">
+			<h3 class="text-lg font-semibold">Bobs Mix</h3>
+			<div class="flex flex-col items-center gap-2">
+			    <img src="mixing-yellow-and-blue.png" alt="Yellow and Blue Paint Mixing" class="w-[200px] h-auto">
+			    <img src="green-bowl.png" alt="Bowl of Green Paint" class="w-[200px] h-auto">
+			</div>
+			<p class="text-small mt-2">Bobs public mixture sent to Alice.</p>
+		    </div>
+		</div>
+	    </div>
+	</section>
+
+	
+
+        <!-- Slide 6: The Eavesdroppers View -->
+        <section id="eavesdroppers-view" class="section-card">
+            <h1 class="text-[3rem] mb-8 text-center font-bold text-[#f8fafc]">What Eve Sees (and Doesnt See)</h1>
+            <p class="key-message">Eve sees the initial public color, and she sees both mixed colors being exchanged. But she <span class="font-bold">doesnt</span> know Alices secret color, Bobs secret color, or the <span class="font-bold">exact ratio</span> of colors in the mixtures. Without that precise ratio, its impossible to "unmix" the paints or create an identical final secret.</p>
+            <div class="graphic-content">
+                <div class="flex flex-row justify-around items-center w-full"> <!-- Container for the three new images -->
+                    <img src="orange-paint-can-with-alice-mixture.png" alt="Alices Orange Mixture Can" class="w-[300px] h-auto">
+                    <img src="perplexed-owl.png" alt="Perplexed Eve" class="w-[300px] h-auto">
+                    <img src="green-paint-can-with-bob-mixture.png" alt="Bobs Green Mixture Can" class="w-[300px] h-auto">
+                </div>
+                <div class="flex-row-center text-xl font-bold text-red-400">
+                    <span class="text-6xl">🚫</span>
+                    <span class="ml-2 mr-2">Unmixing Impossible! No Exact Ratio!</span>
+                    <span class="text-6xl">🚫</span>
+                </div>
+            </div>
+        </section>
+	
+
+        <!-- Slide 7: The Final Secret Mix -->
+        <section id="final-secret-mix" class="section-card">
+            <h1 class="text-[3rem] mb-8 text-center font-bold text-[#f8fafc]">Step 4: Creating the Shared Secret</h1>
+            <p class="key-message">
+                <ul class="list-disc ml-6 text-left w-full">
+                    <li class="list-item">Alice takes Bobs mixed color and adds <span class="font-bold">her original secret color</span> to it.</li>
+                    <li class="list-item">Bob takes Alices mixed color and adds <span class="font-bold">his original secret color</span> to it.</li>
+                    <li class="list-item">Magically, because they both started with the same public base and added their secrets in a specific way, they both arrive at the <span class="font-bold">exact same unique, complex final color!</span> This is their shared secret. Eve cannot replicate this without knowing the exact secret colors.</li>
+                </ul>
+            </p>
+            <div class="graphic-content">
+                <div class="flex flex-col md:flex-row justify-around items-center w-full gap-4">
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold">Alices Final Mix</h3>
+                        <!-- Alices Final Mix Images -->
+                        <div class="flex flex-col items-center gap-2">
+                            <img src="mailman-with-green-paint.png" alt="Mailman with Green Paint" class="w-[180px] h-auto">
+                            <img src="red-paint-poured-into-green-bowl.png" alt="Green Can Mixed into Orange Bowl" class="w-[180px] h-auto">
+                            <img src="purple-bowl.png" alt="Purple Bowl" class="w-[180px] h-auto">
+                        </div>
+                    </div>
+                    <!-- Moved and repositioned "SHARED SECRET!" text -->
+                    <div class="text-center transform translate-y-[158px]">
+                        <div class="text-3xl font-bold gradient-text mt-4">SHARED SECRET!</div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold">Bobs Final Mix</h3>
+                        <!-- Bobs Final Mix Images -->
+                        <div class="flex flex-col items-center gap-2">
+                            <img src="mailman-with-orange-paint.png" alt="Mailman with Orange Paint" class="w-[180px] h-auto">
+                            <img src="blue-paint-poured-into-orange-bowl.png" alt="Orange Can Mixed into Green Bowl" class="w-[180px] h-auto">
+                            <img src="purple-bowl.png" alt="Purple Bowl" class="w-[180px] h-auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+	
+
+        <!-- Slide 8: The "Invisible Ink" Formula -->
+        <section id="invisible-ink-formula" class="section-card">
+            <h1 class="text-[3rem] mb-8 text-center font-bold text-[#f8fafc]">The Shared Secret: Our Invisible Ink Formula</h1>
+            <p class="key-message">This unique, complex final color isnt just a pretty shade; its their
+	      <span class="font-bold">secret formula for an "invisible ink."
+	      </span> Only a pen made with <span class="font-bold">this exact formula</span> can write and reveal secret messages.</p>
+            <div class="graphic-content">
+                <div class="color-swatch w-32 h-32" style="background-color: #6B21A8;"></div>
+                <img src="purple-ink-bottle-pen-eraser.png" alt="Purple ink bottle, pen and eraser" class="w-[40%] md:w-[30.0%]">
+            </div>
+        </section>
+
+        <!-- Slide 9: Summary -->
+        <section id="summary" class="section-card">
+            <h1 class="text-[4rem] mb-8 text-center font-bold text-[#f8fafc]">Recap: The Secret Sharing Journey</h1>
+	    <div class="key-message">
+	      <ul class="list-disc ml-6 text-left" style="font-size: 1.75rem;">
+                    <li class="list-item">Start with a public base.</li>
+                    <li class="list-item">Add your private secret.</li>
+                    <li class="list-item">Mix and exchange the public mixtures.</li>
+                    <li class="list-item">Mix again with your private secret to get the shared secret.</li>
+                    <li class="list-item">Use this shared secret as an "invisible ink formula" for secure messages!</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+

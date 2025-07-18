@@ -1,0 +1,33 @@
+Alice is an anthropomorphized cat in cloak and dagger (like a spy).
+
+Bob is an anthropomorphized dog in cloak and dagger (like a spy).
+
+Eve is an anthropomorphized owl with a monocle wearing a tweed suit.
+
+Alice is whispering to Bob through a very long glass pipe. Eve is in the middle with her ear to the glass listening.
+
+
+1. orange-paint-can-with-alice-mixture.png
+2. perplexed-owl.png
+3. green-paint-can-with-bob-mixture.png
+
+
+Alice is an anthropomorphized cat in cloak and dagger (like a spy).
+A large anthropomorphized pink penguin is handing Alice a can of green paint
+
+mailman-with-green-paint
+green-can-mixed-into-orange-bowl
+purple-bowl
+mailman-with-orange-paint
+
+Right stack:
+mailman-with-orange-paint
+orange-can-mixed-into-green-bowl
+purple-bowl
+
+Generate an image using the text below:
+
+A anthropomorphized pink frog wearing a hat that says "Mailman" is holding a orange paint can and walking to the right.
+
+            font-size: 1.1rem;
+
